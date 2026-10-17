@@ -1,0 +1,9 @@
+name: EggSurvival
+main: dev.itskimlot.eggsurvival.EggSurvivalPlugin
+version: ${version}
+api-version: '26.3'
+commands:
+  eggsurvival:
+    aliases: [es]
+    description: EGGSURVIVAL!!
+    permission: eggsurvival.reload

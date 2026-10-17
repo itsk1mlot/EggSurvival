@@ -1,0 +1,79 @@
+settings:
+  end_day: 100 # 종료 일 수 (기본값: 100일) - 인게임 기준입니다! 1일 = 현실 20분
+  villager_trade_limit: 20 # 주민 거래 제한 (기본값: 20회)
+  death_player_exp_drop_completly: true # 플레이어 사망시 보유중인 경험치를 완전히 드롭할지 여부 (기본값: true)
+  respawned_dragon_drop_exp: 5000 # 리스폰된 드래곤이 죽었을 때 드롭되는 경험치 양 (기본값: 5000)
+  explosion_damage_ratio: 0.25 # 폭발 피해량 비율 (기본값: 0.25) - 1.0 = 100% 피해, 0.5 = 50% 피해, 0.25 = 25% 피해
+  cannot_see_location: true # 좌표를 볼 수 없도록 설정 (기본값: true)
+  remove_chat: true # 데스 메시지, 발전과제 등의 모든 채팅 메시지를 제거할지 여부 (기본값: true)
+  ending: false # 마인크래프트 엔딩 표시 여부 (기본값: false)
+  end_island_portal: false # 엔드 외부섬 포탈 생성 여부 (기본값: false)
+
+  # 드래곤 알 주위에서 소리 재생 설정
+  play_sound_at_dragon_egg:
+    enabled: true # 설치된 드래곤 알 주위에서 소리 재생 여부 (기본값: true)
+    sound: block.beacon.ambient # 재생할 소리 (기본값: block.beacon.ambient)
+
+  # 드래곤 알 보유 플레이어의 패널티 설정
+  dragon_egg_penalty:
+    dimension_movement: false # 차원 이동 허용 여부 (기본값: false)
+    effect: portal # 드래곤 알 보유 플레이어 주위에 생성할 파티클 (none으로 설정시 파티클이 생성되지 않습니다)
+
+    alter: # 제단 설정 (드래곤 알을 보유중인 상태에서 사망시 제단을 생성합니다)
+      enabled: true
+      beacon:
+        enabled: true # 신호기 생성 여부 (기본값: true)
+        duration: 5 # 신호기 유지 시간 (단위: 일) - 인게임 기준입니다! 1일 = 현실 20분
+
+    footprint: # 발자국 설정
+      enabled: true # 발자국 활성화 여부 (기본값: true)
+      duration: 5 # 발자국 유지 시간 (단위: 일) - 인게임 기준입니다! 1일 = 현실 20분
+      visible_at_night: false # 밤에도 발자국이 보이도록 설정 (기본값: false)
+
+  # 맵 설정
+  map:
+    center_location: # 맵 중심 좌표 설정
+      reset: true # 다음 서버 실행시 맵 중심 좌표를 초기화할지 여부 (true로 설정시 맵 중심 좌표가 변경됩니다)
+      x: 0
+      z: 0
+    size: # 맵 크기 설정
+      overworld: # 오버월드의 맵 크기 설정
+        x: 1000
+        z: 1000
+      nether: # 네더의 맵 크기 설정
+        x: 500
+        z: 500
+      end: # 엔더의 맵 크기 설정
+        x: 400
+        z: 400
+
+  # 아이템 설정
+  item:
+    potion_limit: 2 # 최대 포션 보유 가능 갯수 (기본값: 2)
+    golden_apple_duration: 2 # 황금사과 효과 지속 시간 (단위: 초)
+    netherite_template_recipe: true # 네더라이트 형판 제작법 활성화 여부 (기본값: true)
+
+    ban_items: # 사용 불가능 아이템 목록
+      # 기본적으로 모든 값이 false로 설정되어 있습니다. (작성하지 않아도 됨)
+      # drop, pickup, craft, use, place, break 사용 가능
+      - id: ender_pearl
+        settings:
+          drop: true
+          pickup: true
+          craft: true
+      - elytra
+      - shulker_box
+      - ender_chest
+      - shield
+      - totem_of_undying
+      - trident
+
+  # 인챈트 설정
+  enchant:
+    remove_so_expensive: true # 모루의 너무 비쌉니다! 제거 여부 (기본값: true)
+    max_level: # 인챈트 최대레벨 설정 (아이디: 최대레벨 형식으로 작성)
+      sharpness: 10
+      protection: 7
+    ban_enchants: # 사용 불가능 인챈트 목록
+      - mending
+      - infinity
