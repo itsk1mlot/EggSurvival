@@ -9,6 +9,7 @@ class ConfigManager {
     private val configs: MutableList<String> = mutableListOf()
 
     fun loadConfig(name: String) {
+        if (configs.contains(name)) return
         EggSurvivalPlugin.instance.saveResource(name, false)
         configs.add(name)
         EggSurvivalPlugin.instance.logger.info("Config file '$name' has been loaded.")

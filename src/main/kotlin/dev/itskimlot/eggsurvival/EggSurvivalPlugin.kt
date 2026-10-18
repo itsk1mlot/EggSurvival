@@ -8,11 +8,19 @@ import dev.itskimlot.eggsurvival.data.config.ItemData
 import dev.itskimlot.eggsurvival.data.config.MapData
 import dev.itskimlot.eggsurvival.data.config.SettingsData
 import dev.itskimlot.eggsurvival.listener.DragonEggPickUpListener
+import dev.itskimlot.eggsurvival.listener.EndGatewayDisableListener
+import dev.itskimlot.eggsurvival.listener.ExplosionDamageRatioListener
+import dev.itskimlot.eggsurvival.listener.PlayerExpDropCompletelyListener
+import dev.itskimlot.eggsurvival.listener.RemoveEndingListener
+import dev.itskimlot.eggsurvival.listener.RespawnedDragonExpListener
+import dev.itskimlot.eggsurvival.listener.VillagerTradeLimitListener
+import dev.itskimlot.eggsurvival.listener.eggPenalty.AlterListener
 import dev.itskimlot.eggsurvival.listener.eggPenalty.ChangeDimensionListener
 import dev.itskimlot.eggsurvival.listener.eggPenalty.FootprintListener
 import dev.itskimlot.eggsurvival.listener.removeChat.RemoveChatListener
 import dev.itskimlot.eggsurvival.listener.removeChat.RemoveJoinMessageListener
 import dev.itskimlot.eggsurvival.manager.ConfigManager
+import dev.itskimlot.eggsurvival.scheduler.AlterScheduler
 import dev.itskimlot.eggsurvival.scheduler.FootprintScheduler
 import dev.itskimlot.eggsurvival.scheduler.MainScheduler
 import dev.itskimlot.eggsurvival.util.MessageUtil.toMiniMessage
@@ -38,6 +46,7 @@ class EggSurvivalPlugin: JavaPlugin() {
 
         lateinit var mainScheduler: MainScheduler; private set
         lateinit var footprintScheduler: FootprintScheduler; private set
+        lateinit var alterScheduler: AlterScheduler; private set
 
         lateinit var configManager: ConfigManager; private set
     }
@@ -48,9 +57,9 @@ class EggSurvivalPlugin: JavaPlugin() {
 
         // load configuration files
         configManager.loadConfig("config.yml")
-        configManager.loadConfig("message.yml")
 
         configSetup()
+        setupGame()
 
         getCommand("eggsurvival")?.setExecutor(EggSurvivalCommand())
         getCommand("eggsurvival")?.tabCompleter = EggSurvivalCommand()
@@ -58,19 +67,36 @@ class EggSurvivalPlugin: JavaPlugin() {
         val lastFootprint = mutableMapOf<UUID, Location>()
         val nextLeft = mutableMapOf<UUID, Boolean>()
         val createdKey = NamespacedKey("eggsurvival", "footprint_created")
-        val footprintText = "<#F0B5F5>██".toMiniMessage()
+        val footprintText = "<#F0B5F5>▼".toMiniMessage()
 
         mainScheduler = MainScheduler()
         footprintScheduler = FootprintScheduler(createdKey, footprintText)
+        alterScheduler = AlterScheduler()
+
         mainScheduler.start()
         if (configValue.dragonEggPenalty.footprint) footprintScheduler.start()
 
         server.pluginManager.registerEvents(DragonEggPickUpListener(), this)
+        server.pluginManager.registerEvents(VillagerTradeLimitListener(), this)
+        server.pluginManager.registerEvents(RespawnedDragonExpListener(), this)
+        server.pluginManager.registerEvents(ExplosionDamageRatioListener(), this)
+        if (!configValue.endIslandPortal) {
+            server.pluginManager.registerEvents(EndGatewayDisableListener(), this)
+        }
+        if (!configValue.ending) {
+            server.pluginManager.registerEvents(RemoveEndingListener(), this)
+        }
+        if (configValue.deathPlayerExpDropCompletely) {
+            server.pluginManager.registerEvents(PlayerExpDropCompletelyListener(), this)
+        }
         if (configValue.removeChat) {
             server.pluginManager.registerEvents(RemoveJoinMessageListener(), this)
             server.pluginManager.registerEvents(RemoveChatListener(), this)
         }
-        if (configValue.dragonEggPenalty.dimensionMovement) {
+        if (configValue.dragonEggPenalty.alter) {
+            server.pluginManager.registerEvents(AlterListener(), this)
+        }
+        if (!configValue.dragonEggPenalty.dimensionMovement) {
             server.pluginManager.registerEvents(ChangeDimensionListener(), this)
         }
         if (configValue.dragonEggPenalty.footprint) {
@@ -129,8 +155,7 @@ class EggSurvivalPlugin: JavaPlugin() {
                 Registry.PARTICLE_TYPE.get(NamespacedKey.minecraft(config.getString("settings.dragon_egg_penalty.effect") ?: "portal")) ?: Particle.PORTAL,
 
                 config.getBoolean("settings.dragon_egg_penalty.alter.enabled"),
-                config.getBoolean("settings.dragon_egg_penalty.alter.beacon.enabled"),
-                config.getInt("settings.dragon_egg_penalty.alter.beacon.duration"),
+                config.getInt("settings.dragon_egg_penalty.alter.duration"),
 
                 config.getBoolean("settings.dragon_egg_penalty.footprint.enabled"),
                 config.getInt("settings.dragon_egg_penalty.footprint.duration"),
@@ -178,6 +203,10 @@ class EggSurvivalPlugin: JavaPlugin() {
             it.setGameRule(GameRules.ADVANCE_TIME, true)
             it.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, false)
             it.setGameRule(GameRules.SHOW_DEATH_MESSAGES, false)
+
+            if (configValue.cannotSeeLocation) {
+                it.setGameRule(GameRules.REDUCED_DEBUG_INFO, true)
+            }
         }
     }
 }

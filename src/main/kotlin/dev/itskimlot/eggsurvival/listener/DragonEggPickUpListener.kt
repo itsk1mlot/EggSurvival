@@ -12,6 +12,7 @@ class DragonEggPickUpListener: Listener {
     fun onPlayerInteract(event: PlayerInteractEvent) {
         if (event.clickedBlock?.type != Material.DRAGON_EGG) return
         event.isCancelled = true
+        event.clickedBlock?.type = Material.AIR
         event.player.inventory.addItem(ItemStack(Material.DRAGON_EGG))
     }
 }

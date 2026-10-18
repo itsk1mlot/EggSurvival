@@ -1,13 +1,13 @@
 settings:
   end_day: 100 # 종료 일 수 (기본값: 100일) - 인게임 기준입니다! 1일 = 현실 20분
   villager_trade_limit: 20 # 주민 거래 제한 (기본값: 20회)
-  death_player_exp_drop_completly: true # 플레이어 사망시 보유중인 경험치를 완전히 드롭할지 여부 (기본값: true)
+  death_player_exp_drop_completely: true # 플레이어 사망시 보유중인 경험치를 완전히 드롭할지 여부 (기본값: true)
   respawned_dragon_drop_exp: 5000 # 리스폰된 드래곤이 죽었을 때 드롭되는 경험치 양 (기본값: 5000)
   explosion_damage_ratio: 0.25 # 폭발 피해량 비율 (기본값: 0.25) - 1.0 = 100% 피해, 0.5 = 50% 피해, 0.25 = 25% 피해
   cannot_see_location: true # 좌표를 볼 수 없도록 설정 (기본값: true)
   remove_chat: true # 데스 메시지, 발전과제 등의 모든 채팅 메시지를 제거할지 여부 (기본값: true)
   ending: false # 마인크래프트 엔딩 표시 여부 (기본값: false)
-  end_island_portal: false # 엔드 외부섬 포탈 생성 여부 (기본값: false)
+  end_island_portal: false # 엔드 외부섬 포탈 사용 가능 여부 (기본값: false)
 
   # 드래곤 알 주위에서 소리 재생 설정
   play_sound_at_dragon_egg:
@@ -21,9 +21,7 @@ settings:
 
     alter: # 제단 설정 (드래곤 알을 보유중인 상태에서 사망시 제단을 생성합니다)
       enabled: true
-      beacon:
-        enabled: true # 신호기 생성 여부 (기본값: true)
-        duration: 5 # 신호기 유지 시간 (단위: 일) - 인게임 기준입니다! 1일 = 현실 20분
+      duration: 5 # 제단 유지 시간 (단위: 일) - 인게임 기준입니다! 1일 = 현실 20분
 
     footprint: # 발자국 설정
       enabled: true # 발자국 활성화 여부 (기본값: true)

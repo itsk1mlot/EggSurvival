@@ -1,21 +1,26 @@
 package dev.itskimlot.eggsurvival.listener.eggPenalty
 
 import dev.itskimlot.eggsurvival.util.MessageUtil.toMiniMessage
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerPortalEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerTeleportEvent
 import java.util.UUID
 
 class ChangeDimensionListener: Listener {
     private val lastMessageTime: MutableMap<UUID, Long> = mutableMapOf()
 
     @EventHandler
-    fun onChangeDimension(event: PlayerPortalEvent) {
+        fun onChangeDimension(event: PlayerTeleportEvent) {
         val player = event.player
 
         if (player.inventory.contains(Material.DRAGON_EGG)) {
+            val fromWorld = event.from.world
+            if (fromWorld == Bukkit.getWorld("world_the_end")) return
+
             event.isCancelled = true
 
             val now = System.currentTimeMillis()

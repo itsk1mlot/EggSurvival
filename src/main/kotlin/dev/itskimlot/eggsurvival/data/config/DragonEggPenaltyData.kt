@@ -7,7 +7,6 @@ data class DragonEggPenaltyData(
     val effect: Particle,
 
     val alter: Boolean,
-    val alterBeacon: Boolean,
     val alterDuration: Int,
 
     val footprint: Boolean,

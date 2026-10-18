@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.4.20"
     id("com.gradleup.shadow") version "8.3.0"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
 group = "dev.itskimlot.eggsurvival"
@@ -40,5 +41,11 @@ tasks.processResources {
     filteringCharset = "UTF-8"
     filesMatching("plugin.yml") {
         expand(props)
+    }
+}
+
+tasks {
+    runServer {
+        minecraftVersion("26.3")
     }
 }

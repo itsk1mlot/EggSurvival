@@ -16,11 +16,13 @@ class MainScheduler {
 
         val world = Bukkit.getServer().getWorld("world")!!
         scheduler = Bukkit.getScheduler().runTaskTimer(EggSurvivalPlugin.instance, Runnable {
+            // day표시
             val day = world.fullTime / 24000L + 1
             Bukkit.getOnlinePlayers().forEach { player ->
                 player.sendActionBar("<white>Day: $day / ${EggSurvivalPlugin.configValue.endDay}".toMiniMessage())
             }
 
+            // endday 확인
             if (day >= EggSurvivalPlugin.configValue.endDay) {
                 Bukkit.getOnlinePlayers().forEach { player ->
                     player.sendActionBar("".toMiniMessage())
@@ -32,13 +34,11 @@ class MainScheduler {
                 stop()
             }
 
+            // 드래곤 알 보유 패널티
             Bukkit.getOnlinePlayers().forEach { player ->
                 if (player.inventory.contains(Material.DRAGON_EGG)) {
-                    player.sendActionBar("<white>Day: $day <gray>| <green>당신은 드래곤 알을 가지고 있습니다!".toMiniMessage())
-                    player.world.spawnParticle(EggSurvivalPlugin.configValue.dragonEggPenalty.effect, player.location, 10, 0.5, 1.0, 0.5, 0.1)
-                    if (player.world.isDayTime) {
-                        // spawn footprint
-                    }
+                    player.sendActionBar("<white>Day: $day <gray>| <light_purple>당신은 드래곤 알을 가지고 있습니다!".toMiniMessage())
+                    player.world.spawnParticle(EggSurvivalPlugin.configValue.dragonEggPenalty.effect, player.location, 50, 0.5, 1.0, 0.5, 0.1)
                 }
             }
         }, 0L, 20L)
